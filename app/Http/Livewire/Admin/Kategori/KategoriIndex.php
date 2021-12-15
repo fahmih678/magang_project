@@ -119,7 +119,7 @@ class KategoriIndex extends Component
             'cancelButtonText' => 'batal',
             'onConfirmed' => 'destroy',
             'onCancelled' => 'resetInputFields',
-            'text' =>  'Anda dapat membuat penilaian yang lain',
+            'text' =>  'Anda dapat membuat kategori yang lain',
         ]);
     }
 

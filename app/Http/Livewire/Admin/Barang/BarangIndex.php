@@ -44,7 +44,6 @@ class BarangIndex extends Component
     }
     public function store()
     {
-        // $this->listKategori = ;
         $this->validate(
             [
                 'state.nama' => ['required'],
@@ -58,14 +57,11 @@ class BarangIndex extends Component
         $name = $this->state['nama'] . "-" . Carbon::now()->timestamp . "." . $ekstensi;
 
         try {
-            // $file->storePublicly('');
             $this->state['path_file'] = $file->storePubliclyAs(
                 '/barang',
                 $name,
                 'public'
             );
-            // Storage::putFileAs('public/barang', $file, $name);
-            // $this->state['path_file'] = ('barang/' . $name);
             $this->barang = Barang::create($this->state);
 
             foreach ($this->barang_kategori as $key => $value) {
@@ -132,15 +128,19 @@ class BarangIndex extends Component
 
         try {
             if ($this->state['path_file'] != $barang->path_file) {
-                if (Storage::disk('local')->exists($barang->path_file)) {
-                    # code...
-                    Storage::disk('local')->delete($barang->path_file);
+                if (Storage::disk('public')->exists($barang->path_file)) {
+                    Storage::disk('public')->delete($barang->path_file);
                 }
 
                 $ekstensi = $this->state['path_file']->getClientOriginalExtension();
                 $file = $this->state['path_file'];
                 $name = $this->state['nama'] . "-" . Carbon::now()->timestamp . "." . $ekstensi;
                 $this->state['path_file'] = Storage::putFileAs('barang', $file, $name);
+                $this->state['path_file'] = $file->storePubliclyAs(
+                    '/barang',
+                    $name,
+                    'public'
+                );
 
                 $this->barang->update($this->state);
             } else {
@@ -193,7 +193,7 @@ class BarangIndex extends Component
         try {
             $barang = Barang::where('id', $id)->first();
             $save = $barang;
-            Storage::disk('local')->delete($barang->path_file);
+            Storage::disk('public')->delete($barang->path_file);
             Barang::destroy($barang->id);
 
             $this->alert('success', $this->alertName . ' ' .  $save['nama'] . ' berhasil di hapus', [
@@ -255,5 +255,6 @@ class BarangIndex extends Component
         $this->barang = null;
         $this->updateMode = false;
         $this->barangId = null;
+        $this->barang_kategori = [];
     }
 }
