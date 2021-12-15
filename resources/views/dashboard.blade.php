@@ -10,6 +10,8 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     You're logged in!
+                    <button type="button" class="btn btn-secondary"><a href="{{ route('dashboard-admin') }}">Goto
+                            Dashboard</a></button>
                 </div>
             </div>
         </div>
